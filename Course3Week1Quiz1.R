@@ -64,3 +64,5 @@ ans4 <- distinct(data.frame(listOfZips)) #number of distinct zipcodes (oops) =32
 finalans4 <- sum(listOfZips == "21231")
 
 #--------------------------------------------------------------
+
+q5url <-"https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
