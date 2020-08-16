@@ -80,4 +80,4 @@ system.time(DT[,mean(pwgtp15,by=SEX)]) #uses dt features because you don't have 
 #system.time(tapply(DT$pwgtp15,DT$SEX,mean))# uses tappy
 #system.time(rowMeans(DT)[DT$SEX==1]; rowMeans(DT)[DT$SEX==2])#bad code
 #system.time(sapply(split(DT$pwgtp15,DT$SEX),mean))#uses sapply and is fastest
-system.time(mean(DT$pwgtp15,by=DT$SEX))
+#system.time(mean(DT$pwgtp15,by=DT$SEX))
