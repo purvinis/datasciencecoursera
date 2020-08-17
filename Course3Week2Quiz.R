@@ -85,7 +85,7 @@ close(htmlUrl)
 
 head(htmlCode)
 ans4html <-c(nchar(htmlCode[10]), nchar(htmlCode[20]), 
-             nchar(htmlCode[30]), nchar(htmlCode[100]))
+             nchar(htmlCode[30]), nchar(htmlCode[100]))d
 
 #ans is [1] 45 31  7 25
 
@@ -94,7 +94,7 @@ ans4html <-c(nchar(htmlCode[10]), nchar(htmlCode[20]),
 #https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for
 #Original source of the data:
 #http://www.cpc.ncep.noaa.gov/data/indices/wksst8110.for
-#(Hint: this is a fixed width file format)
+#(Hint: this is a fixed width file format), so read.fwf()
 
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for"
 SST <- read.fwf(fileUrl, skip=4, widths=c(12, 7, 4, 9, 4, 9, 4, 9, 4))
