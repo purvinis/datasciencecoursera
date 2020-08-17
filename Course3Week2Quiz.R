@@ -85,7 +85,7 @@ close(htmlUrl)
 
 head(htmlCode)
 ans4html <-c(nchar(htmlCode[10]), nchar(htmlCode[20]), 
-             nchar(htmlCode[30]), nchar(htmlCode[100]))d
+             nchar(htmlCode[30]), nchar(htmlCode[100]))
 
 #ans is [1] 45 31  7 25
 
