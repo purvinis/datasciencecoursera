@@ -33,3 +33,6 @@ c3w3q2Url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fjeff.jpg"
 
 install.packages("jpeg")
 library(jpeg)
+download.file(c3w3q2Url,destfile = "./data/jeff.jpg")
+jeff <- readJPEG("./data/jeff.jpg",native = TRUE)
+head(jeff)
