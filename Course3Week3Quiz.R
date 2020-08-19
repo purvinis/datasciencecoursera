@@ -1,5 +1,7 @@
 library(dplyr)
 library(tidyr)
+remove.packages ("tidyverse")
+#library(tidyverse)
 
 #Q1
 #The American Community Survey distributes downloadable data about United States 
@@ -58,37 +60,52 @@ edu <-read.csv("./data/eduData.csv")
 head(gdb)  #X is the column factor for the country code
 head(edu)  #CountryCode is the column factor
 
-gdbcountrylist <-pull(gdb,X) 
-gdbcountrylist <-gdbcountrylist[!gdbcountrylist %in% ""]
-educountrylist <-pull(edu,CountryCode)
-noMatches <- 0
-
-for (i in 1:length(gdbcountrylist)){
-  #print (gdbcountrylist[i])
-  for (j in 1:length(educountrylist)) {
-    #print (educountrylist[j])
-    if (educountrylist[j] == gdbcountrylist[i]) 
-      noMatches <- noMatches + 1
-  }
-}
-
-print(noMatches)  #234
-#try a different way, since a for loop was probably not what course wanted
+#
 # https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
 colnames(gdb)
 colnames (edu)
 #rename(gdb,X = "CountryCode")
 names(gdb)[1] <-"CountryCode"
 oneset <-inner_join(gdb,edu,by = "CountryCode")  #one dataset by CountryCode
-oneset <- sapply(oneset[,2],as.numeric)
-oneset <- arrange(oneset,desc(Gross.domestic.product.2012))
+oneset <- filter(oneset,!Gross.domestic.product.2012 %in% "")
 
+oneset <- arrange(oneset,desc(as.numeric(Gross.domestic.product.2012)))
 
-z1 <-select(gdb,c(X,Gross.domestic.product.2012))
-z2<-arrange(z1[5:194,],desc(Gross.domestic.product.2012[5:194]))
-z2[,2] <- sapply(z2[,2], as.numeric)
-z3 <- arrange(z2,desc(Gross.domestic.product.2012))
-print(z3[13,])  #GRD, #178 = Grenada, but #178 is also St. Kitts
+matches <-length(oneset[,1])  
+#returns 189. THe rankings go to 190. 178 is repeated twice
+print(oneset[13,1:4])
+#13         KNA                         178  NA St. Kitts and Nevis
+
 
 #Q4--------------------------------------------------------
-#What is the average GDP ranking for the "High income: OECD" and "High income: nonOECD" group?
+# What is the average GDP ranking for the 
+#"High income: OECD" and "High income: nonOECD" group?
+# column is Income.Group
+
+newset <- oneset %>% 
+  select(CountryCode,Gross.domestic.product.2012,Income.Group) %>%
+  spread(Income.Group,Gross.domestic.product.2012,fill = NA) %>%
+  select(2:3)
+
+meannonOECD <- mean(as.numeric(na.omit(newset[,1]))) #91.91304
+meanOECD <-  mean(as.numeric(na.omit(newset[,2]))) #32.96667
+
+#Q5-----------------------------------------------------
+#Cut the GDP ranking into 5 separate quantile groups. 
+#Make a table versus Income.Group. How many countries
+#are Lower middle income but among the 38 nations with highest GDP?
+
+income_sets <- oneset %>% 
+  select(CountryCode,Gross.domestic.product.2012,Income.Group) %>%
+  spread(Income.Group,Gross.domestic.product.2012,fill = NA) 
+
+lowerset <-income_sets %>%
+  select(CountryCode,`Lower middle income`)
+
+dgpgroups <-quantile(as.numeric(oneset$Gross.domestic.product.2012),probs = seq(0,1,0.2))
+  
+highest38 <- oneset[(1:(190-dgpgroups[5])),1:2]
+commoncountry <-inner_join(lowerset,highest38,by = "CountryCode")
+completed <- na.omit(commoncountry)  #16
+
+#answer is 5, but I"m not getting this
