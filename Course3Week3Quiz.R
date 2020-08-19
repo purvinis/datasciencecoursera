@@ -63,9 +63,19 @@ gdbcountrylist <-gdbcountrylist[!gdbcountrylist %in% ""]
 educountrylist <-pull(edu,CountryCode)
 noMatches <- 0
 
-for (i in gdbcountrylist){
-  for (j in educountrylist) {
-    if (educountrylist[j] == gdbcountrylist[i]) noMatches <- noMatches + 1
-    
+for (i in 1:length(gdbcountrylist)){
+  #print (gdbcountrylist[i])
+  for (j in 1:length(educountrylist)) {
+    #print (educountrylist[j])
+    if (educountrylist[j] == gdbcountrylist[i]) 
+      noMatches <- noMatches + 1
   }
 }
+
+print(noMatches)  #234
+
+z1 <-select(gdb,c(X,Gross.domestic.product.2012))
+z2<-arrange(z1[5:194,],desc(Gross.domestic.product.2012[5:194]))
+z2[,2] <- sapply(z2[,2], as.numeric)
+z3 <- arrange(z2,desc(Gross.domestic.product.2012))
+print(z3[13,])  #GRD, #178 = Grenada, but #178 is also St. Kitts
