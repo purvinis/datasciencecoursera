@@ -73,9 +73,22 @@ for (i in 1:length(gdbcountrylist)){
 }
 
 print(noMatches)  #234
+#try a different way, since a for loop was probably not what course wanted
+# https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf
+colnames(gdb)
+colnames (edu)
+#rename(gdb,X = "CountryCode")
+names(gdb)[1] <-"CountryCode"
+oneset <-inner_join(gdb,edu,by = "CountryCode")  #one dataset by CountryCode
+oneset <- sapply(oneset[,2],as.numeric)
+oneset <- arrange(oneset,desc(Gross.domestic.product.2012))
+
 
 z1 <-select(gdb,c(X,Gross.domestic.product.2012))
 z2<-arrange(z1[5:194,],desc(Gross.domestic.product.2012[5:194]))
 z2[,2] <- sapply(z2[,2], as.numeric)
 z3 <- arrange(z2,desc(Gross.domestic.product.2012))
 print(z3[13,])  #GRD, #178 = Grenada, but #178 is also St. Kitts
+
+#Q4--------------------------------------------------------
+#What is the average GDP ranking for the "High income: OECD" and "High income: nonOECD" group?
