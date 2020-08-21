@@ -63,3 +63,25 @@ oneset <-inner_join(gdbstart,edustart,by = "CountryCode")  #one dataset by Count
 
 print(length(grep("^Fiscal year end: June",oneset$Special.Notes,value = TRUE)))
 print(length(grep("June",oneset$Special.Notes,value = TRUE)))
+
+#Q5----------------------------------------------------------
+#You can use the quantmod (http://www.quantmod.com/) package to get historical
+#stock prices for publicly traded companies on the NASDAQ and NYSE. Use the
+#following code to download data on Amazon's stock price and
+#get the times the data was sampled.
+#How many values were collected in 2012? How many values were collected on Mondays in 2012?
+
+install.packages('quantmod')
+library(quantmod)
+install.packages ("lubridate")
+library(lubridate)
+amzn = getSymbols("AMZN",auto.assign=FALSE)
+sampleTimes = index(amzn)
+years12 <- grep("^2012-[0-9]",sampleTimes)
+howmany <- print(length( years12))   #returns 250
+
+#example to get day of week:
+wday("2012-12-20",label = TRUE)  #Mondays are integer 2
+
+mondays <- sum(wday(sampleTimes[years12]) == 2)  #returns 47
+
